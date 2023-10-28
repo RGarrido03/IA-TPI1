@@ -68,7 +68,7 @@ cidades_portugal = Cidades(city_connections,city_coordinates)
 p = SearchProblem(cidades_portugal,'Braga','Faro')
 
 t = MyTree(p,'depth')
-print(t.search2())
+print('(depth)',t.search2())
 print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
 n = t.solution
 print('solution : depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
@@ -78,7 +78,7 @@ print('\n')
 
 
 t = MyTree(p,'A*')
-print(t.search2())
+print('(A*)',t.search2())
 print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
 n = t.solution
 print('solution : depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
@@ -91,7 +91,35 @@ print('\n')
 # -----
 
 
-orderdelivery_portugal = OrderDelivery(city_connections,city_coordinates)
+od_portugal = OrderDelivery(city_connections,city_coordinates)
+
+(t,path) = orderdelivery_search(od_portugal,'Braga',['Lamego','Coimbra','Covilha'])
+print('(breadth) path:',path)
+print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
+n = t.solution
+print('depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+print('\n')
+
+(t,path) = orderdelivery_search(od_portugal,'Lisboa',['Faro','Evora','Beja','Portalegre'])
+print('(breadth) path:',path)
+print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
+n = t.solution
+print('depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+print('\n')
+
+(t,path) = orderdelivery_search(od_portugal,'Lisboa',['Evora','Beja','Portalegre'])
+print('(breadth) path:',path)
+print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
+n = t.solution
+print('depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+print('\n')
+
+(t,path) = orderdelivery_search(od_portugal,'Lisboa',['Evora','Beja','Portalegre'],'A*')
+print('(A*) path:',path)
+print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
+n = t.solution
+print('depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+print('\n')
 
 
 

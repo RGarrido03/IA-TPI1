@@ -1,14 +1,32 @@
-['Braga', 'Porto', 'Agueda', 'Aveiro', 'Coimbra', 'Leiria', 'Castelo Branco', 'Santarem', 'Lisboa', 'Evora', 'Beja', 'Faro']
+(depth) ['Braga', 'Porto', 'Agueda', 'Aveiro', 'Coimbra', 'Leiria', 'Castelo Branco', 'Santarem', 'Lisboa', 'Evora', 'Beja', 'Faro']
 non_terminals= 11 terminals= 19
 solution : depth= 11 cost= 1104 heuristic= 0 eval= 1104
 last leaf: depth= 1 cost= 25 heuristic= 552 eval= 577
 
 
-['Braga', 'Porto', 'Agueda', 'Coimbra', 'Leiria', 'Santarem', 'Evora', 'Beja', 'Faro']
+(A*) ['Braga', 'Porto', 'Agueda', 'Coimbra', 'Leiria', 'Santarem', 'Evora', 'Beja', 'Faro']
 non_terminals= 85 terminals= 160
 solution : depth= 8 cost= 706 heuristic= 0 eval= 706
 last leaf: depth= 8 cost= 660 heuristic= 420 eval= 1080
 
 
-['Braga', 'Guimaraes', 'Lamego', 'Viseu', 'Covilha', 'Castelo Branco', 'Santarem', 'Lisboa', 'Santarem', 'Leiria', 'Coimbra', 'Agueda', 'Porto', 'Braga']
-3303 9696
+(breadth) path: ['Braga', 'Porto', 'Agueda', 'Coimbra', 'Viseu', 'Covilha', 'Guarda', 'Lamego', 'Guimaraes', 'Braga']
+non_terminals= 36205 terminals= 107820
+depth= 9 cost= 552 heuristic= 0 eval= 552
+
+
+(breadth) path: ['Lisboa', 'Santarem', 'Portalegre', 'Evora', 'Beja', 'Faro', 'Beja', 'Lisboa']
+non_terminals= 8591 terminals= 25152
+depth= 7 cost= 1010 heuristic= 0 eval= 1010
+
+
+(breadth) path: ['Lisboa', 'Santarem', 'Portalegre', 'Evora', 'Beja', 'Lisboa']
+non_terminals= 554 terminals= 1630
+depth= 5 cost= 716 heuristic= 0 eval= 716
+
+
+(A*) path: ['Lisboa', 'Beja', 'Evora', 'Portalegre', 'Santarem', 'Lisboa']
+non_terminals= 45 terminals= 140
+depth= 5 cost= 716 heuristic= 0 eval= 716
+
+

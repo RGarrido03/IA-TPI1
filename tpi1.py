@@ -123,4 +123,9 @@ class MyTree(SearchTree):
 
     # if needed, auxiliary methods can be added here
 
+def orderdelivery_search(domain,city,targetcities,strategy='breadth',maxsize=None):
+    #IMPLEMENT HERE
+    pass
+ 
+
 # If needed, auxiliary functions can be added here
