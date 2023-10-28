@@ -62,8 +62,8 @@ class MyTree(SearchTree):
         # ADD HERE ANY CODE YOU NEED
 
     def astar_add_to_open(self, lnewnodes):
-        # IMPLEMENT HERE
-        pass
+        self.open_nodes.extend(lnewnodes)
+        self.open_nodes.sort(key=lambda n: n.cost + n.heuristic)
 
     def search2(self):
         while self.open_nodes:
