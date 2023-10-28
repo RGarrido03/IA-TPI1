@@ -61,6 +61,7 @@ class MyTree(SearchTree):
         self.open_nodes = [root]
         self.terminals = 1
         self.maxsize = maxsize
+        self.count = 0
         # ADD HERE ANY CODE YOU NEED
 
     def astar_add_to_open(self, lnewnodes):
@@ -82,32 +83,36 @@ class MyTree(SearchTree):
                     newnode = MyNode(newstate, node, node.depth + 1,
                                      node.cost + self.problem.domain.cost(node.state, a),
                                      self.problem.domain.heuristic(newstate, self.problem.goal),
-                                     node.cost + self.problem.domain.cost(node.state, a) + self.problem.domain.heuristic(newstate, self.problem.goal))
+                                     node.cost + self.problem.domain.cost(node.state, a) +
+                                     self.problem.domain.heuristic(newstate, self.problem.goal))
                     lnewnodes.append(newnode)
             self.add_to_open(lnewnodes)
+            self.count = 0
             self.manage_memory()
         return None
 
     def manage_memory(self):
-        print(f"Calling manage_memory. Current terminal nodes: {self.terminals}")
+        # print(f"Calling manage_memory. Current non-terminal: {self.non_terminals}, terminal nodes: {len(self.open_nodes)}")
         if self.strategy != "A*" or self.maxsize is None or self.terminals + self.non_terminals <= self.maxsize:
             return
 
+        self.count += 1
+        print(f"Current true recursion: {self.count}")
         for node in reversed(self.open_nodes):
             if not node.marked_for_deletion:
                 node.marked_for_deletion = True
                 parent_node = node.parent
 
-                # Get node siblings
+                # Get node siblings (including itself in the list)
                 parent_children = [child for child in self.open_nodes if child.parent == parent_node]
 
                 print([child.marked_for_deletion for child in parent_children])
 
                 if all(child.marked_for_deletion for child in parent_children):
-                    print("tru")
+                    print("-> Deleting tururururuuuuuu")
 
                     # Remove the parent node and its children (i.e., the node siblings)
-                    self.open_nodes = [node for node in self.open_nodes if node not in [parent_children, parent_node]]
+                    self.open_nodes = [node for node in self.open_nodes if node not in parent_children.append(parent_node)]
 
                     # Get minimum eval for each parent child
                     parent_node.eval = min(node.eval for node in parent_children)
@@ -116,16 +121,16 @@ class MyTree(SearchTree):
 
                     # Sort again (is this needed?)
                     self.open_nodes.sort(key=lambda n: (n.eval, n.state))
-                return
+                break
 
         # Repeat to check if size still exceeds the threshold
         self.manage_memory()
 
     # if needed, auxiliary methods can be added here
 
-def orderdelivery_search(domain,city,targetcities,strategy='breadth',maxsize=None):
-    #IMPLEMENT HERE
+
+def orderdelivery_search(domain, city, targetcities, strategy='breadth', maxsize=None):
+    # IMPLEMENT HERE
     pass
- 
 
 # If needed, auxiliary functions can be added here
