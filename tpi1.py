@@ -49,7 +49,7 @@ class MyNode(SearchNode):
         self.cost = cost
         self.heuristic = heuristic
         self.eval = eval_arg
-        self.marked_for_deletion = False
+        self.is_marked_for_deletion = False
         # ADD HERE ANY CODE YOU NEED
 
 
@@ -71,9 +71,9 @@ class MyTree(SearchTree):
     def search2(self):
         while self.open_nodes:
             node = self.open_nodes.pop(0)
+            self.terminals = len(self.open_nodes) + 1
             if self.problem.goal_test(node.state):
                 self.solution = node
-                self.terminals = len(self.open_nodes) + 1
                 return self.get_path(node)
             self.non_terminals += 1
             lnewnodes = []
@@ -92,30 +92,32 @@ class MyTree(SearchTree):
         return None
 
     def manage_memory(self):
-        # print(f"Calling manage_memory. Current non-terminal: {self.non_terminals}, terminal nodes: {len(self.open_nodes)}")
+        self.count += 1
         if self.strategy != "A*" or self.maxsize is None or self.terminals + self.non_terminals <= self.maxsize:
             return
 
-        self.count += 1
-        print(f"Current true recursion: {self.count}")
+        print(f"Recursion count if true: {self.count}")
+        self.open_nodes.sort(key=lambda n: (n.eval, n.state))
         for node in reversed(self.open_nodes):
-            if not node.marked_for_deletion:
-                node.marked_for_deletion = True
+            if not node.is_marked_for_deletion:
+                node.is_marked_for_deletion = True
                 parent_node = node.parent
 
-                # Get node siblings (including itself in the list)
-                parent_children = [child for child in self.open_nodes if child.parent == parent_node]
+                # Get node's siblings
+                node_siblings = [n for n in self.open_nodes if n.parent == parent_node and n != node]
 
-                print([child.marked_for_deletion for child in parent_children])
+                print([sibling.is_marked_for_deletion for sibling in node_siblings])
+                if all([sibling.is_marked_for_deletion for sibling in node_siblings]):
+                    print("-> All matched")
 
-                if all(child.marked_for_deletion for child in parent_children):
-                    print("-> Deleting tururururuuuuuu")
-
-                    # Remove the parent node and its children (i.e., the node siblings)
-                    self.open_nodes = [node for node in self.open_nodes if node not in parent_children.append(parent_node)]
+                    # Remove node and siblings
+                    self.open_nodes.remove(node)
+                    for sibling in node_siblings:
+                        self.open_nodes.remove(sibling)
+                    self.open_nodes.remove(parent_node)
 
                     # Get minimum eval for each parent child
-                    parent_node.eval = min(node.eval for node in parent_children)
+                    parent_node.eval = min(node.eval for node in node_siblings + [node])
 
                     self.open_nodes.append(parent_node)
 
@@ -124,7 +126,7 @@ class MyTree(SearchTree):
                 break
 
         # Repeat to check if size still exceeds the threshold
-        self.manage_memory()
+        # self.manage_memory()
 
     # if needed, auxiliary methods can be added here
 
