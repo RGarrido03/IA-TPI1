@@ -94,6 +94,8 @@ class MyTree(SearchTree):
     def manage_memory(self):
         self.count += 1
         if self.strategy != "A*" or self.maxsize is None or self.terminals + self.non_terminals <= self.maxsize:
+            # for node in self.open_nodes:
+            #    node.is_marked_for_deletion = False
             return
 
         print(f"Recursion count if true: {self.count}")
@@ -114,19 +116,14 @@ class MyTree(SearchTree):
                     self.open_nodes.remove(node)
                     for sibling in node_siblings:
                         self.open_nodes.remove(sibling)
-                    self.open_nodes.remove(parent_node)
 
-                    # Get minimum eval for each parent child
+                    # Get minimum eval for each parent child, update the parent node and return it to the queue
                     parent_node.eval = min(node.eval for node in node_siblings + [node])
-
                     self.open_nodes.append(parent_node)
-
-                    # Sort again (is this needed?)
-                    self.open_nodes.sort(key=lambda n: (n.eval, n.state))
                 break
 
         # Repeat to check if size still exceeds the threshold
-        # self.manage_memory()
+        self.manage_memory()
 
     # if needed, auxiliary methods can be added here
 
