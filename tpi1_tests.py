@@ -87,7 +87,7 @@ print('last leaf: depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=
 print('\n')
 
 t = MyTree(p,'A*',180)
-print('(A*)',t.search2())
+print('(A*, maxsize=180)',t.search2())
 print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
 n = t.solution
 print('solution : depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
@@ -101,6 +101,13 @@ print('\n')
 
 
 od_portugal = OrderDelivery(city_connections,city_coordinates)
+
+(t,path) = orderdelivery_search(od_portugal,'Braga',['Lamego','Coimbra','Covilha','Lisboa'],'depth')
+print('path:',path)
+print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
+n = t.solution
+print('depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+print('\n')
 
 (t,path) = orderdelivery_search(od_portugal,'Braga',['Lamego','Coimbra','Covilha'])
 print('(breadth) path:',path)
