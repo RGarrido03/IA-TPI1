@@ -43,8 +43,12 @@ class OrderDelivery(SearchDomain):
 
 class MyNode(SearchNode):
 
-    def __init__(self, state, parent, arg3=None, arg4=None, arg5=None, arg6=None):
+    def __init__(self, state, parent, depth=None, cost=None, heuristic=None, eval_arg=None):
         super().__init__(state, parent)
+        self.depth = depth
+        self.cost = cost
+        self.heuristic = heuristic
+        self.eval = eval_arg
         # ADD HERE ANY CODE YOU NEED
 
 
@@ -52,6 +56,9 @@ class MyTree(SearchTree):
 
     def __init__(self, problem, strategy='breadth', maxsize=None):
         super().__init__(problem, strategy)
+        root = MyNode(problem.initial, None, 0, 0, 0, 0)
+        self.open_nodes = [root]
+        self.terminals = 1
         # ADD HERE ANY CODE YOU NEED
 
     def astar_add_to_open(self, lnewnodes):
@@ -59,8 +66,24 @@ class MyTree(SearchTree):
         pass
 
     def search2(self):
-        # IMPLEMENT HERE
-        pass
+        while self.open_nodes:
+            node = self.open_nodes.pop(0)
+            if self.problem.goal_test(node.state):
+                self.solution = node
+                self.terminals = len(self.open_nodes) + 1
+                return self.get_path(node)
+            self.non_terminals += 1
+            lnewnodes = []
+            for a in self.problem.domain.actions(node.state):
+                newstate = self.problem.domain.result(node.state, a)
+                if newstate not in self.get_path(node):
+                    newnode = MyNode(newstate, node, node.depth + 1,
+                                     node.cost + self.problem.domain.cost(node.state, a),
+                                     self.problem.domain.heuristic(newstate, self.problem.goal),
+                                     node.cost + self.problem.domain.cost(node.state, a) + self.problem.domain.heuristic(newstate, self.problem.goal))
+                    lnewnodes.append(newnode)
+            self.add_to_open(lnewnodes)
+        return None
 
     def manage_memory(self):
         # IMPLEMENT HERE
