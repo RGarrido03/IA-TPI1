@@ -49,6 +49,7 @@ class MyNode(SearchNode):
         self.cost = cost
         self.heuristic = heuristic
         self.eval = eval_arg
+        self.marked_for_deletion = False
         # ADD HERE ANY CODE YOU NEED
 
 
@@ -59,6 +60,7 @@ class MyTree(SearchTree):
         root = MyNode(problem.initial, None, 0, 0, 0, 0)
         self.open_nodes = [root]
         self.terminals = 1
+        self.maxsize = maxsize
         # ADD HERE ANY CODE YOU NEED
 
     def astar_add_to_open(self, lnewnodes):
@@ -83,11 +85,41 @@ class MyTree(SearchTree):
                                      node.cost + self.problem.domain.cost(node.state, a) + self.problem.domain.heuristic(newstate, self.problem.goal))
                     lnewnodes.append(newnode)
             self.add_to_open(lnewnodes)
+            self.manage_memory()
         return None
 
     def manage_memory(self):
-        # IMPLEMENT HERE
-        pass
+        print(f"Calling manage_memory. Current terminal nodes: {self.terminals}")
+        if self.strategy != "A*" or self.maxsize is None or self.terminals + self.non_terminals <= self.maxsize:
+            return
+
+        for node in reversed(self.open_nodes):
+            if not node.marked_for_deletion:
+                node.marked_for_deletion = True
+                parent_node = node.parent
+
+                # Get node siblings
+                parent_children = [child for child in self.open_nodes if child.parent == parent_node]
+
+                print([child.marked_for_deletion for child in parent_children])
+
+                if all(child.marked_for_deletion for child in parent_children):
+                    print("tru")
+
+                    # Remove the parent node and its children (i.e., the node siblings)
+                    self.open_nodes = [node for node in self.open_nodes if node not in [parent_children, parent_node]]
+
+                    # Get minimum eval for each parent child
+                    parent_node.eval = min(node.eval for node in parent_children)
+
+                    self.open_nodes.append(parent_node)
+
+                    # Sort again (is this needed?)
+                    self.open_nodes.sort(key=lambda n: (n.eval, n.state))
+                return
+
+        # Repeat to check if size still exceeds the threshold
+        self.manage_memory()
 
     # if needed, auxiliary methods can be added here
 
