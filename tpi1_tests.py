@@ -86,6 +86,15 @@ n = t.open_nodes[-1]
 print('last leaf: depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
 print('\n')
 
+t = MyTree(p,'A*',180)
+print('(A*)',t.search2())
+print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
+n = t.solution
+print('solution : depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+n = t.open_nodes[-1]
+print('last leaf: depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+print('\n')
+
 
 
 # -----

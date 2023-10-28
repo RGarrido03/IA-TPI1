@@ -10,6 +10,12 @@ solution : depth= 8 cost= 706 heuristic= 0 eval= 706
 last leaf: depth= 8 cost= 660 heuristic= 420 eval= 1080
 
 
+(A*) ['Braga', 'Porto', 'Agueda', 'Coimbra', 'Leiria', 'Santarem', 'Evora', 'Beja', 'Faro']
+non_terminals= 65 terminals= 114
+solution : depth= 8 cost= 706 heuristic= 0 eval= 706
+last leaf: depth= 8 cost= 660 heuristic= 420 eval= 1080
+
+
 (breadth) path: ['Braga', 'Porto', 'Agueda', 'Coimbra', 'Viseu', 'Covilha', 'Guarda', 'Lamego', 'Guimaraes', 'Braga']
 non_terminals= 36205 terminals= 107820
 depth= 9 cost= 552 heuristic= 0 eval= 552
