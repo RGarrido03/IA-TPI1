@@ -8,8 +8,6 @@ import time
 
 from tree_search import *
 
-is_sleep_on = False
-
 
 class OrderDelivery(SearchDomain):
 
@@ -29,46 +27,22 @@ class OrderDelivery(SearchDomain):
         return actlist
 
     def result(self, state, action):
-        if is_sleep_on:
-            time.sleep(0.1)
-
-        print(f"\nRESULT()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
-        print(f"action: {action}")
-
         c1, c2 = action
         return c2, [city for city in state[1] if city != c2]
 
     def satisfies(self, state, goal):
-        if is_sleep_on:
-            time.sleep(0.1)
-
-        print(f"\nSATISFIES()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
-        print(f"Current goal cities in state: {[city in state for city in goal]}")
-
         return state[0] == goal and len(state[1]) == 0
 
     def cost(self, state, action):
-        if is_sleep_on:
-            time.sleep(0.1)
-
-        print(f"\nCOST()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
-
         for (x1, x2, d) in self.connections:
             if (x1, x2) == action or (x2, x1) == action:
-                print(f"Returning {d}")
                 return d
 
     def heuristic(self, state, goal):
-        if is_sleep_on:
-            time.sleep(0.1)
-
-        print(f"\nHEURISTIC()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
-
         c1_x, c1_y = self.coordinates[state[0]]
         c2_x, c2_y = self.coordinates[goal]
 
         h = round(math.hypot(c1_x - c2_x, c1_y - c2_y))
-        print(f"Returning {h}")
         return h
 
 
