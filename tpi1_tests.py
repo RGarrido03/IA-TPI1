@@ -95,6 +95,33 @@ n = t.open_nodes[-1]
 print('last leaf: depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
 print('\n')
 
+# -----
+
+p = SearchProblem(cidades_portugal,'Guimaraes','Faro')
+
+t = MyTree(p,'A*',160)
+print('(A*, maxsize=160)',t.search2())
+print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
+n = t.solution
+print('solution : depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+n = t.open_nodes[-1]
+print('last leaf: depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+print('\n')
+
+# -----
+
+p = SearchProblem(cidades_portugal,'Guimaraes','Beja')
+
+t = MyTree(p,'A*',150)
+print('(A*, maxsize=150)',t.search2())
+print('non_terminals=',t.non_terminals,'terminals=',t.terminals)
+n = t.solution
+print('solution : depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+n = t.open_nodes[-1]
+print('last leaf: depth=',n.depth,'cost=',n.cost,'heuristic=',n.heuristic,'eval=',n.eval)
+print('\n')
+
+
 
 
 # -----
