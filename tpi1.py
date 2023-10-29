@@ -17,7 +17,7 @@ class OrderDelivery(SearchDomain):
         # ANY NEEDED CODE CAN BE ADDED HERE
 
     def actions(self, state):
-        print(f"ACTIONS()\nstate: {type(state).__name__} = {state}\n")
+        print(f"\nACTIONS()\nstate: {type(state).__name__} = {state}")
         city = state[0]
         actlist = []
         for (C1, C2, D) in self.connections:
@@ -25,36 +25,44 @@ class OrderDelivery(SearchDomain):
                 actlist += [(C1, C2)]
             elif C2 == city:
                 actlist += [(C2, C1)]
+        print(f"Returning {actlist}")
         return actlist
 
     def result(self, state, action):
-        print(f"RESULT()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}\n")
+        print(f"\nRESULT()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
         (C1, C2) = action
+        print(f"action: {action}")
         if C1 in state:
+            # self.statePath += [C1]
+            print(f"Returning {C2}")
             return C2
 
     def satisfies(self, state, goal):
-        print(f"SATISFIES()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}\n")
-        if not self.statePath:
-            return False
-
-        if state == self.statePath[0] and all([city in self.statePath for city in goal]):
+        print(f"\nSATISFIES()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
+        print(f"Current goal cities in state: {[city in state for city in goal]}")
+        if state[0] == state[-1] and all([city in state for city in goal]):
+            print(f"Returning True")
             return True
+        print(f"Returning False")
         return False
 
     def cost(self, state, action):
-        print(f"COST()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}\n")
+        print(f"\nCOST()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
         c1, c2 = action
         if c1 in state:
+            print(f"C1 in state: True")
             for (x1, x2, d) in self.connections:
                 if (x1, x2) == action or (x2, x1) == action:
+                    print(f"Returning {d}")
                     return d
 
     def heuristic(self, state, goal):
-        print(f"HEURISTIC()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}\n")
+        print(f"\nHEURISTIC()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
         c1_x, c1_y = self.coordinates[state]
         c2_x, c2_y = self.coordinates[goal[0]]
-        return round(math.hypot(c1_x - c2_x, c1_y - c2_y))
+        h = round(math.hypot(c1_x - c2_x, c1_y - c2_y))
+        print(f"Returning {h}")
+        return h
 
 
 class MyNode(SearchNode):
@@ -97,7 +105,8 @@ class MyTree(SearchTree):
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state, a)
                 if newstate not in self.get_path(node):
-                    newnode = MyNode(newstate, node, node.depth + 1,
+                    newnode = MyNode([newstate] if self.isOrderDeliveryDomain else newstate,
+                                     node, node.depth + 1,
                                      node.cost + self.problem.domain.cost(node.state, a),
                                      self.problem.domain.heuristic(newstate, self.problem.goal),
                                      node.cost + self.problem.domain.cost(node.state, a) +
@@ -145,7 +154,6 @@ class MyTree(SearchTree):
 def orderdelivery_search(domain, city, targetcities, strategy='breadth', maxsize=None):
     p = SearchProblem(domain, city, targetcities)
     t = MyTree(p, strategy, maxsize)
-    path = t.search2()
-    return t, path
+    return t, t.search2()
 
 # If needed, auxiliary functions can be added here
