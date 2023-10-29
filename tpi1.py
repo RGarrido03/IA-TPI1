@@ -36,11 +36,7 @@ class OrderDelivery(SearchDomain):
         print(f"action: {action}")
 
         c1, c2 = action
-        new = c1 if c1 == state[0] else c2
-
-        if new in state[1]:
-            state[1].remove(new)
-        return new, state[1]
+        return c2, [city for city in state[1] if city != c2]
 
     def satisfies(self, state, goal):
         if is_sleep_on:
