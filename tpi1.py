@@ -16,7 +16,6 @@ class OrderDelivery(SearchDomain):
     def __init__(self, connections, coordinates):
         self.connections = connections
         self.coordinates = coordinates
-        self.statePath = []
         # ANY NEEDED CODE CAN BE ADDED HERE
 
     def actions(self, state):
@@ -38,7 +37,6 @@ class OrderDelivery(SearchDomain):
         (C1, C2) = action
         print(f"action: {action}")
         if C1 in state:
-            # self.statePath += [C1]
             print(f"Returning {C2}")
             if is_sleep_on:
                 time.sleep(0.1)
@@ -98,9 +96,7 @@ class MyTree(SearchTree):
 
     def __init__(self, problem, strategy='breadth', maxsize=None):
         super().__init__(problem, strategy)
-        self.isOrderDeliveryDomain = isinstance(self.problem.domain, OrderDelivery)
-        root = MyNode(tuple(problem.initial) if self.isOrderDeliveryDomain else problem.initial,
-                      None, 0, 0, 0, 0)
+        root = MyNode(problem.initial, None, 0, 0, 0, 0)
         self.open_nodes = [root]
         self.terminals = 1
         self.maxsize = maxsize
@@ -122,15 +118,10 @@ class MyTree(SearchTree):
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state, a)
                 if newstate not in self.get_path(node):
-                    print(newstate)
-                    print(node.state)
-                    newstate = tuple([newstate]) + node.state if self.isOrderDeliveryDomain else newstate
-
                     cost = node.cost + self.problem.domain.cost(node.state, a)
                     heuristic = self.problem.domain.heuristic(newstate, self.problem.goal)
 
                     newnode = MyNode(newstate, node, node.depth + 1, cost, heuristic, cost + heuristic)
-
                     lnewnodes.append(newnode)
             self.add_to_open(lnewnodes)
             self.terminals = len(self.open_nodes)
