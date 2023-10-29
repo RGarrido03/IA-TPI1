@@ -1,11 +1,14 @@
 # STUDENT NAME: Rúben Tavares Garrido
 # STUDENT NUMBER: 107927
 import math
+import time
 
 # DISCUSSED TPI-1 WITH: (names and numbers):
 
 
 from tree_search import *
+
+is_sleep_on = True
 
 
 class OrderDelivery(SearchDomain):
@@ -26,6 +29,8 @@ class OrderDelivery(SearchDomain):
             elif C2 == city:
                 actlist += [(C2, C1)]
         print(f"Returning {actlist}")
+        if is_sleep_on:
+            time.sleep(0.1)
         return actlist
 
     def result(self, state, action):
@@ -35,15 +40,23 @@ class OrderDelivery(SearchDomain):
         if C1 in state:
             # self.statePath += [C1]
             print(f"Returning {C2}")
+            if is_sleep_on:
+                time.sleep(0.1)
             return C2
+        if is_sleep_on:
+            time.sleep(0.1)
 
     def satisfies(self, state, goal):
         print(f"\nSATISFIES()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
         print(f"Current goal cities in state: {[city in state for city in goal]}")
         if state[0] == state[-1] and all([city in state for city in goal]):
             print(f"Returning True")
+            if is_sleep_on:
+                time.sleep(0.1)
             return True
         print(f"Returning False")
+        if is_sleep_on:
+            time.sleep(0.1)
         return False
 
     def cost(self, state, action):
@@ -54,6 +67,8 @@ class OrderDelivery(SearchDomain):
             for (x1, x2, d) in self.connections:
                 if (x1, x2) == action or (x2, x1) == action:
                     print(f"Returning {d}")
+                    if is_sleep_on:
+                        time.sleep(0.1)
                     return d
 
     def heuristic(self, state, goal):
@@ -62,6 +77,8 @@ class OrderDelivery(SearchDomain):
         c2_x, c2_y = self.coordinates[goal[0]]
         h = round(math.hypot(c1_x - c2_x, c1_y - c2_y))
         print(f"Returning {h}")
+        if is_sleep_on:
+            time.sleep(0.1)
         return h
 
 
