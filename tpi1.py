@@ -44,17 +44,21 @@ class OrderDelivery(SearchDomain):
             c2_x, c2_y = self.coordinates[goal]
             return round(math.hypot(c1_x - c2_x, c1_y - c2_y))
 
-        distances_to_unvisited = [math.hypot(c1_x - self.coordinates[city][0], c1_y - self.coordinates[city][1]) for city in state[1]]
+        distances_to_unvisited = [(self.get_distance(state[0], city), city)
+                                  for city in state[1]]
 
-        min_distance_to_unvisited = min(distances_to_unvisited)
-        closest_city = state[1][distances_to_unvisited.index(min_distance_to_unvisited)]
+        min_distance_to_unvisited, closest_city = min(distances_to_unvisited)
 
         # Distance from the closest unvisited city to the goal
-        c1_x, c1_y = self.coordinates[closest_city]
-        c2_x, c2_y = self.coordinates[goal]
-        distance_to_goal = math.hypot(c1_x - c2_x, c1_y - c2_y)
+        distance_to_goal = self.get_distance(closest_city, goal)
 
         return round(min_distance_to_unvisited + distance_to_goal)
+
+    def get_distance(self, city1, city2):
+        for c1, c2, distance in self.connections:
+            if (c1 == city1 and c2 == city2) or (c1 == city2 and c2 == city1):
+                return distance
+        return 99999
 
 
 class MyNode(SearchNode):
