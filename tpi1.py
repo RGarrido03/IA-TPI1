@@ -134,8 +134,8 @@ class MyTree(SearchTree):
                     parent_node.is_marked_for_deletion = True
                     self.non_terminals -= 1
 
-                    for n in self.open_nodes:
-                        n.is_marked_for_deletion = False
+                    # for n in self.open_nodes:
+                    #     n.is_marked_for_deletion = False
                 break
 
         # Repeat to check if size still exceeds the threshold
