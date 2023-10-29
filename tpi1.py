@@ -42,17 +42,13 @@ class OrderDelivery(SearchDomain):
             return newcity, state[1]
 
     def satisfies(self, state, goal):
-        print(f"\nSATISFIES()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
-        print(f"Current goal cities in state: {[city in state for city in goal]}")
-        if state[0] == state[-1] and all([city in state for city in goal]):
-            print(f"Returning True")
-            if is_sleep_on:
-                time.sleep(0.1)
-            return True
-        print(f"Returning False")
         if is_sleep_on:
             time.sleep(0.1)
-        return False
+
+        print(f"\nSATISFIES()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
+        print(f"Current goal cities in state: {[city in state for city in goal]}")
+
+        return state[0] == goal
 
     def cost(self, state, action):
         print(f"\nCOST()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
@@ -74,7 +70,6 @@ class OrderDelivery(SearchDomain):
         print(f"Returning {h}")
         if is_sleep_on:
             time.sleep(0.1)
-        return h
 
 
 class MyNode(SearchNode):
