@@ -38,13 +38,23 @@ class OrderDelivery(SearchDomain):
                 return d
 
     def heuristic(self, state, goal):
-        sum_h = 0
         c1_x, c1_y = self.coordinates[state[0]]
-        for city in state[1] + [goal]:
-            c2_x, c2_y = self.coordinates[city]
-            sum_h += math.hypot(c1_x - c2_x, c1_y - c2_y)
 
-        return round(sum_h / (len(state[1]) + 1))
+        if not state[1]:
+            c2_x, c2_y = self.coordinates[goal]
+            return round(math.hypot(c1_x - c2_x, c1_y - c2_y))
+
+        distances_to_unvisited = [math.hypot(c1_x - self.coordinates[city][0], c1_y - self.coordinates[city][1]) for city in state[1]]
+
+        min_distance_to_unvisited = min(distances_to_unvisited)
+        closest_city = state[1][distances_to_unvisited.index(min_distance_to_unvisited)]
+
+        # Distance from the closest unvisited city to the goal
+        c1_x, c1_y = self.coordinates[closest_city]
+        c2_x, c2_y = self.coordinates[goal]
+        distance_to_goal = math.hypot(c1_x - c2_x, c1_y - c2_y)
+
+        return round(min_distance_to_unvisited + distance_to_goal)
 
 
 class MyNode(SearchNode):
