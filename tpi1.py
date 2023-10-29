@@ -1,5 +1,6 @@
 # STUDENT NAME: Rúben Tavares Garrido
 # STUDENT NUMBER: 107927
+import math
 
 # DISCUSSED TPI-1 WITH: (names and numbers):
 
@@ -12,6 +13,7 @@ class OrderDelivery(SearchDomain):
     def __init__(self, connections, coordinates):
         self.connections = connections
         self.coordinates = coordinates
+        self.path = []
         # ANY NEEDED CODE CAN BE ADDED HERE
 
     def actions(self, state):
@@ -25,20 +27,31 @@ class OrderDelivery(SearchDomain):
         return actlist
 
     def result(self, state, action):
-        # IMPLEMENT HERE
-        pass
+        (C1, C2) = action
+        if C1 == state:
+            return C2
 
     def satisfies(self, state, goal):
-        # IMPLEMENT HERE
-        pass
+        if self.path[0] != state or self.path[-1] != state:
+            return False
+
+        for city in goal:
+            if city not in self.path:
+                return False
+
+        return True
 
     def cost(self, state, action):
-        # IMPLEMENT HERE
-        pass
+        c1, c2 = action
+        if c1 == state:
+            for (x1, x2, d) in self.connections:
+                if (x1, x2) == action or (x2, x1) == action:
+                    return d
 
     def heuristic(self, state, goal):
-        # IMPLEMENT HERE
-        pass
+        c1_x, c1_y = self.coordinates[state]
+        c2_x, c2_y = self.coordinates[goal]
+        return round(math.hypot(c1_x - c2_x, c1_y - c2_y))
 
 
 class MyNode(SearchNode):
