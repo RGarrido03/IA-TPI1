@@ -124,7 +124,9 @@ class MyTree(SearchTree):
 
 
 def orderdelivery_search(domain, city, targetcities, strategy='breadth', maxsize=None):
-    # IMPLEMENT HERE
-    pass
+    p = SearchProblem(domain, city, targetcities)
+    t = MyTree(p, strategy, maxsize)
+    path = t.search2()
+    return t, path
 
 # If needed, auxiliary functions can be added here
