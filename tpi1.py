@@ -35,8 +35,8 @@ class OrderDelivery(SearchDomain):
         print(f"\nRESULT()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
         print(f"action: {action}")
 
-        (C1, C2) = action
-        if C1 in state:
+        c1, c2 = action
+        if c1 in state:
             newcity = action[0]
             state[1].remove(newcity)
             return newcity, state[1]
@@ -51,25 +51,28 @@ class OrderDelivery(SearchDomain):
         return state[0] == goal
 
     def cost(self, state, action):
-        print(f"\nCOST()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
-        c1, c2 = action
-        if c1 in state:
-            print(f"C1 in state: True")
-            for (x1, x2, d) in self.connections:
-                if (x1, x2) == action or (x2, x1) == action:
-                    print(f"Returning {d}")
-                    if is_sleep_on:
-                        time.sleep(0.1)
-                    return d
-
-    def heuristic(self, state, goal):
-        print(f"\nHEURISTIC()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
-        c1_x, c1_y = self.coordinates[state[0]]
-        c2_x, c2_y = self.coordinates[goal[0]]
-        h = round(math.hypot(c1_x - c2_x, c1_y - c2_y))
-        print(f"Returning {h}")
         if is_sleep_on:
             time.sleep(0.1)
+
+        print(f"\nCOST()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
+
+        for (x1, x2, d) in self.connections:
+            if (x1, x2) == action or (x2, x1) == action:
+                print(f"Returning {d}")
+                return d
+
+    def heuristic(self, state, goal):
+        if is_sleep_on:
+            time.sleep(0.1)
+
+        print(f"\nHEURISTIC()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
+
+        c1_x, c1_y = self.coordinates[state[0]]
+        c2_x, c2_y = self.coordinates[goal]
+
+        h = round(math.hypot(c1_x - c2_x, c1_y - c2_y))
+        print(f"Returning {h}")
+        return h
 
 
 class MyNode(SearchNode):
