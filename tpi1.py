@@ -104,22 +104,20 @@ class MyTree(SearchTree):
                     return
 
                 # Get node's siblings
-                node_siblings = [n for n in self.open_nodes if n.parent == parent_node and n != node]
+                node_siblings = [n for n in self.open_nodes if n.parent == parent_node]
 
-                node_siblings_mfd = [sibling.is_marked_for_deletion for sibling in node_siblings]
-                if all(node_siblings_mfd):
+                if all([sibling.is_marked_for_deletion for sibling in node_siblings]):
                     # Remove node and siblings
-                    self.open_nodes.remove(node)
                     for sibling in node_siblings:
                         self.open_nodes.remove(sibling)
 
                     # Get minimum eval for each parent child, update the parent node and return it to the queue
                     parent_node.eval = min(node.eval for node in node_siblings + [node])
-                    self.open_nodes.append(parent_node)
+                    self.non_terminals -= 1
+                    # self.open_nodes.append(parent_node)
 
                     for n in self.open_nodes:
                         n.is_marked_for_deletion = False
-                    print("breaking because whatever")
                 break
 
         # Repeat to check if size still exceeds the threshold
