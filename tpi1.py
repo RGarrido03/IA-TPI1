@@ -1,7 +1,6 @@
 # STUDENT NAME: Rúben Tavares Garrido
 # STUDENT NUMBER: 107927
 import math
-import time
 
 # DISCUSSED TPI-1 WITH: (names and numbers): Diana Miranda 107457
 
@@ -39,11 +38,13 @@ class OrderDelivery(SearchDomain):
                 return d
 
     def heuristic(self, state, goal):
+        sum_h = 0
         c1_x, c1_y = self.coordinates[state[0]]
-        c2_x, c2_y = self.coordinates[goal]
+        for city in state[1] + [goal]:
+            c2_x, c2_y = self.coordinates[city]
+            sum_h += math.hypot(c1_x - c2_x, c1_y - c2_y)
 
-        h = round(math.hypot(c1_x - c2_x, c1_y - c2_y))
-        return h
+        return round(sum_h / (len(state[1]) + 1))
 
 
 class MyNode(SearchNode):
