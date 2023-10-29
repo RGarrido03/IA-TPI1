@@ -3,7 +3,7 @@
 import math
 import time
 
-# DISCUSSED TPI-1 WITH: (names and numbers):
+# DISCUSSED TPI-1 WITH: (names and numbers): Diana Miranda 107457
 
 
 from tree_search import *
