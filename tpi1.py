@@ -8,7 +8,7 @@ import time
 
 from tree_search import *
 
-is_sleep_on = True
+is_sleep_on = False
 
 
 class OrderDelivery(SearchDomain):
@@ -19,7 +19,6 @@ class OrderDelivery(SearchDomain):
         # ANY NEEDED CODE CAN BE ADDED HERE
 
     def actions(self, state):
-        print(f"\nACTIONS()\nstate: {type(state).__name__} = {state}")
         city = state[0]
         actlist = []
         for (C1, C2, D) in self.connections:
@@ -27,9 +26,6 @@ class OrderDelivery(SearchDomain):
                 actlist += [(C1, C2)]
             elif C2 == city:
                 actlist += [(C2, C1)]
-        print(f"Returning {actlist}")
-        if is_sleep_on:
-            time.sleep(0.1)
         return actlist
 
     def result(self, state, action):
@@ -163,8 +159,9 @@ class MyTree(SearchTree):
 
 
 def orderdelivery_search(domain, city, targetcities, strategy='breadth', maxsize=None):
-    p = SearchProblem(domain, [city], targetcities)
+    p = SearchProblem(domain, (city, targetcities), city)
     t = MyTree(p, strategy, maxsize)
-    return t, t.search2()
+
+    return t, [city for (city, unvisited) in t.search2()]
 
 # If needed, auxiliary functions can be added here
