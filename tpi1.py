@@ -104,7 +104,7 @@ class MyTree(SearchTree):
         return None
 
     def manage_memory(self):
-        if self.strategy != "A*" or self.maxsize is None or self.terminals + self.non_terminals <= self.maxsize:
+        if self.strategy != "A*" or self.maxsize is None or self.terminals + self.non_terminals < self.maxsize - 1:
             return
 
         self.open_nodes.sort(key=lambda n: (n.eval, n.state))
