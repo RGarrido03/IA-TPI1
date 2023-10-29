@@ -71,7 +71,7 @@ class MyTree(SearchTree):
         while self.open_nodes:
             node = self.open_nodes.pop(0)
             if self.problem.goal_test(node.state):
-                self.terminals = len(self.open_nodes) + 1
+                # self.terminals = len(self.open_nodes) + 1
                 self.solution = node
                 return self.get_path(node)
             self.non_terminals += 1
@@ -99,20 +99,21 @@ class MyTree(SearchTree):
         for node in reversed(self.open_nodes):
             if not node.is_marked_for_deletion:
                 node.is_marked_for_deletion = True
+
                 parent_node = node.parent
                 if parent_node is None:
                     return
 
-                # Get node's siblings
-                node_siblings = [n for n in self.open_nodes if n.parent == parent_node]
+                # Get node's parent children (node + its siblings)
+                parent_children = [n for n in self.open_nodes if n.parent == parent_node]
 
-                if all([sibling.is_marked_for_deletion for sibling in node_siblings]):
+                if all([sibling.is_marked_for_deletion for sibling in parent_children]):
                     # Remove node and siblings
-                    for sibling in node_siblings:
-                        self.open_nodes.remove(sibling)
+                    for child in parent_children:
+                        self.open_nodes.remove(child)
 
                     # Get minimum eval for each parent child, update the parent node and return it to the queue
-                    parent_node.eval = min(node.eval for node in node_siblings + [node])
+                    parent_node.eval = min(child.eval for child in parent_children)
                     self.non_terminals -= 1
 
                     # for n in self.open_nodes:
@@ -121,8 +122,6 @@ class MyTree(SearchTree):
 
         # Repeat to check if size still exceeds the threshold
         self.manage_memory()
-
-    # if needed, auxiliary methods can be added here
 
 
 def orderdelivery_search(domain, city, targetcities, strategy='breadth', maxsize=None):
