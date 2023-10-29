@@ -114,10 +114,9 @@ class MyTree(SearchTree):
                     # Get minimum eval for each parent child, update the parent node and return it to the queue
                     parent_node.eval = min(node.eval for node in node_siblings + [node])
                     self.non_terminals -= 1
-                    # self.open_nodes.append(parent_node)
 
-                    for n in self.open_nodes:
-                        n.is_marked_for_deletion = False
+                    # for n in self.open_nodes:
+                    #     n.is_marked_for_deletion = False
                 break
 
         # Repeat to check if size still exceeds the threshold
