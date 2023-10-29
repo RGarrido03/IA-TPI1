@@ -38,27 +38,19 @@ class OrderDelivery(SearchDomain):
                 return d
 
     def heuristic(self, state, goal):
-        c1_x, c1_y = self.coordinates[state[0]]
-
         if not state[1]:
-            c2_x, c2_y = self.coordinates[goal]
-            return round(math.hypot(c1_x - c2_x, c1_y - c2_y))
+            return self.get_distance(state[0], goal)
 
-        distances_to_unvisited = [(self.get_distance(state[0], city), city)
-                                  for city in state[1]]
-
+        distances_to_unvisited = [(self.get_distance(state[0], city), city) for city in state[1]]
         min_distance_to_unvisited, closest_city = min(distances_to_unvisited)
 
-        # Distance from the closest unvisited city to the goal
-        distance_to_goal = self.get_distance(closest_city, goal)
-
-        return round(min_distance_to_unvisited + distance_to_goal)
+        distance_from_unvisited_to_goal = self.get_distance(closest_city, goal)
+        return round(min_distance_to_unvisited + distance_from_unvisited_to_goal)
 
     def get_distance(self, city1, city2):
-        for c1, c2, distance in self.connections:
-            if (c1 == city1 and c2 == city2) or (c1 == city2 and c2 == city1):
-                return distance
-        return 99999
+        c1_x, c1_y = self.coordinates[city1]
+        c2_x, c2_y = self.coordinates[city2]
+        return round(math.hypot(c1_x - c2_x, c1_y - c2_y))
 
 
 class MyNode(SearchNode):
