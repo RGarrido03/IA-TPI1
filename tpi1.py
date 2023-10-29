@@ -36,10 +36,11 @@ class OrderDelivery(SearchDomain):
         print(f"action: {action}")
 
         c1, c2 = action
-        if c1 in state:
-            newcity = action[0]
-            state[1].remove(newcity)
-            return newcity, state[1]
+        new = c1 if c1 == state[0] else c2
+
+        if new in state[1]:
+            state[1].remove(new)
+        return new, state[1]
 
     def satisfies(self, state, goal):
         if is_sleep_on:
@@ -48,7 +49,7 @@ class OrderDelivery(SearchDomain):
         print(f"\nSATISFIES()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
         print(f"Current goal cities in state: {[city in state for city in goal]}")
 
-        return state[0] == goal
+        return state[0] == goal and len(state[1]) == 0
 
     def cost(self, state, action):
         if is_sleep_on:
