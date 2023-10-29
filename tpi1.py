@@ -13,7 +13,6 @@ class OrderDelivery(SearchDomain):
     def __init__(self, connections, coordinates):
         self.connections = connections
         self.coordinates = coordinates
-        # ANY NEEDED CODE CAN BE ADDED HERE
 
     def actions(self, state):
         city = state[0]
@@ -26,8 +25,7 @@ class OrderDelivery(SearchDomain):
         return actlist
 
     def result(self, state, action):
-        c1, c2 = action
-        return c2, [city for city in state[1] if city != c2]
+        return action[1], [city for city in state[1] if city != action[1]]
 
     def satisfies(self, state, goal):
         return state[0] == goal and len(state[1]) == 0
@@ -41,11 +39,9 @@ class OrderDelivery(SearchDomain):
         if not state[1]:
             return self.get_distance(state[0], goal)
 
-        distances_to_unvisited = [(self.get_distance(state[0], city), city) for city in state[1]]
-        min_distance_to_unvisited, closest_city = min(distances_to_unvisited)
-
-        distance_from_unvisited_to_goal = self.get_distance(closest_city, goal)
-        return round(min_distance_to_unvisited + distance_from_unvisited_to_goal)
+        min_distance_to_closest, closest_city = min([(self.get_distance(state[0], city), city) for city in state[1]])
+        distance_from_closest_to_goal = self.get_distance(closest_city, goal)
+        return round(min_distance_to_closest + distance_from_closest_to_goal)
 
     def get_distance(self, city1, city2):
         return round(math.dist(self.coordinates[city1], self.coordinates[city2]))
@@ -60,7 +56,6 @@ class MyNode(SearchNode):
         self.heuristic = heuristic
         self.eval = eval_arg
         self.is_marked_for_deletion = False
-        # ADD HERE ANY CODE YOU NEED
 
 
 class MyTree(SearchTree):
@@ -71,7 +66,6 @@ class MyTree(SearchTree):
         self.open_nodes = [root]
         self.terminals = 1
         self.maxsize = maxsize
-        # ADD HERE ANY CODE YOU NEED
 
     def astar_add_to_open(self, lnewnodes):
         self.open_nodes.extend(lnewnodes)
@@ -84,8 +78,10 @@ class MyTree(SearchTree):
                 self.terminals = len(self.open_nodes) + 1
                 self.solution = node
                 return self.get_path(node)
+
             self.non_terminals += 1
             lnewnodes = []
+
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state, a)
                 if newstate not in self.get_path(node):
@@ -94,6 +90,7 @@ class MyTree(SearchTree):
 
                     newnode = MyNode(newstate, node, node.depth + 1, cost, heuristic, cost + heuristic)
                     lnewnodes.append(newnode)
+
             self.add_to_open(lnewnodes)
             self.terminals = len(self.open_nodes)
             self.manage_memory()
@@ -107,7 +104,6 @@ class MyTree(SearchTree):
         for node in reversed(self.open_nodes):
             if not node.is_marked_for_deletion:
                 node.is_marked_for_deletion = True
-
                 parent_node = node.parent
                 if parent_node is None:
                     return
@@ -120,13 +116,10 @@ class MyTree(SearchTree):
                     for child in parent_children:
                         self.open_nodes.remove(child)
 
-                    # Get minimum eval for each parent child, update the parent node and return it to the queue
+                    # Get minimum eval for each parent child and update the parent node
                     parent_node.eval = min(child.eval for child in parent_children)
                     parent_node.is_marked_for_deletion = True
                     self.non_terminals -= 1
-
-                    # for n in self.open_nodes:
-                    #     n.is_marked_for_deletion = False
                 break
 
         # Repeat to check if size still exceeds the threshold
