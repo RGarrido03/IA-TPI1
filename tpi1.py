@@ -71,7 +71,7 @@ class MyTree(SearchTree):
         while self.open_nodes:
             node = self.open_nodes.pop(0)
             if self.problem.goal_test(node.state):
-                # self.terminals = len(self.open_nodes) + 1
+                self.terminals = len(self.open_nodes) + 1
                 self.solution = node
                 return self.get_path(node)
             self.non_terminals += 1
@@ -86,12 +86,11 @@ class MyTree(SearchTree):
                                      self.problem.domain.heuristic(newstate, self.problem.goal))
                     lnewnodes.append(newnode)
             self.add_to_open(lnewnodes)
-            self.terminals = len(self.open_nodes) + 1
+            self.terminals = len(self.open_nodes)
             self.manage_memory()
         return None
 
     def manage_memory(self):
-        print(f"Current terminals: {self.terminals}, non-terminals: {self.non_terminals}, total: {self.terminals + self.non_terminals}")
         if self.strategy != "A*" or self.maxsize is None or self.terminals + self.non_terminals <= self.maxsize:
             return
 
