@@ -48,9 +48,7 @@ class OrderDelivery(SearchDomain):
         return round(min_distance_to_unvisited + distance_from_unvisited_to_goal)
 
     def get_distance(self, city1, city2):
-        c1_x, c1_y = self.coordinates[city1]
-        c2_x, c2_y = self.coordinates[city2]
-        return round(math.hypot(c1_x - c2_x, c1_y - c2_y))
+        return round(math.dist(self.coordinates[city1], self.coordinates[city2]))
 
 
 class MyNode(SearchNode):
