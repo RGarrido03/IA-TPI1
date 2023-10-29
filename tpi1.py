@@ -109,7 +109,7 @@ class MyTree(SearchTree):
         return None
 
     def manage_memory(self):
-        if self.strategy != "A*" or self.maxsize is None or self.terminals + self.non_terminals < self.maxsize - 1:
+        if self.strategy != "A*" or self.maxsize is None or self.terminals + self.non_terminals <= self.maxsize:
             return
 
         self.open_nodes.sort(key=lambda n: (n.eval, n.state))
@@ -131,10 +131,11 @@ class MyTree(SearchTree):
 
                     # Get minimum eval for each parent child, update the parent node and return it to the queue
                     parent_node.eval = min(child.eval for child in parent_children)
+                    parent_node.is_marked_for_deletion = True
                     self.non_terminals -= 1
 
-                    # for n in self.open_nodes:
-                    #     n.is_marked_for_deletion = False
+                    for n in self.open_nodes:
+                        n.is_marked_for_deletion = False
                 break
 
         # Repeat to check if size still exceeds the threshold
