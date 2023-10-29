@@ -29,16 +29,17 @@ class OrderDelivery(SearchDomain):
         return actlist
 
     def result(self, state, action):
-        print(f"\nRESULT()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
-        (C1, C2) = action
-        print(f"action: {action}")
-        if C1 in state:
-            print(f"Returning {C2}")
-            if is_sleep_on:
-                time.sleep(0.1)
-            return C2
         if is_sleep_on:
             time.sleep(0.1)
+
+        print(f"\nRESULT()\nstate: {type(state).__name__} = {state}\naction: {type(action).__name__} = {action}")
+        print(f"action: {action}")
+
+        (C1, C2) = action
+        if C1 in state:
+            newcity = action[0]
+            state[1].remove(newcity)
+            return newcity, state[1]
 
     def satisfies(self, state, goal):
         print(f"\nSATISFIES()\nstate: {type(state).__name__} = {state}\ngoal: {type(goal).__name__} = {goal}")
